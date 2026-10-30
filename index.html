@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Kohort daveti</title>
+<!-- Davet linkinin açtığı sayfa: kodu uygulamaya verir (kohort://Davet?kod=…); uygulama yoksa kurulumu anlatır.
+     Kaynak kohort/web/davet, yayın scripts/davet-yayinla.sh ile cenkdz/kohort-davet (GitHub Pages). Takip, çerez,
+     dış kaynak yok. -->
+<style>
+  :root { --zemin: #F9F6EF; --kart: #FEFDFA; --cizgi: #DED8CF; --yazi: #261D15; --yazi2: #5D534A; --yesil: #4B6A2F; }
+  @media (prefers-color-scheme: dark) {
+    :root { --zemin: #17130E; --kart: #221D18; --cizgi: #403932; --yazi: #EFEBE2; --yazi2: #B6B0A6; --yesil: #A8C487; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--zemin); color: var(--yazi); font: 17px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 440px; margin: 0 auto; padding: 32px 20px 48px; }
+  .marka { font-family: Georgia, serif; font-size: 20px; margin: 0 0 28px; }
+  .marka span { color: var(--yesil); }
+  h1 { font-family: Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.15; margin: 0 0 10px; }
+  h2 { font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--yazi2); margin: 36px 0 10px; }
+  p { margin: 0 0 12px; }
+  .ikincil { color: var(--yazi2); }
+  .dugme { display: block; text-align: center; background: var(--yesil); color: var(--zemin); text-decoration: none;
+    font-weight: 700; border-radius: 14px; padding: 15px; margin: 22px 0 6px; }
+  .kart { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 14px; padding: 14px 16px; margin: 0 0 10px; }
+  .kart b { display: block; }
+  a { color: var(--yesil); }
+  .kucuk { font-size: 14px; color: var(--yazi2); margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="marka"><span>◗</span> Kohort</p>
+  <h1 id="baslik">Davetin var.</h1>
+  <p id="durum" class="ikincil">Kohort açılıyor…</p>
+  <a id="ac" class="dugme" href="#">Kohort'ta aç</a>
+
+  <h2>Kohort yüklü değilse</h2>
+  <div class="kart">
+    <b>iPhone</b>
+    Önce App Store'dan <b style="display:inline">TestFlight</b>'ı yükle, sonra
+    <a href="https://testflight.apple.com/join/YursFKNH">bu linkten Kohort'u yükle</a>.
+  </div>
+  <div class="kart">
+    <b>Android</b>
+    Gmail adresini seni davet edene yaz. Teste eklenince
+    <a href="https://play.google.com/apps/internaltest/4701630537342535998">buradan yükle</a>.
+  </div>
+  <p class="ikincil">Yükledikten sonra bu sayfaya dön ve “Kohort'ta aç”a bas.</p>
+  <p class="kucuk">Bu link yalnız sana; kimseyle paylaşma. Kohort, aynı okul ve dönemden mezunların davetle girdiği küçük bir topluluk.</p>
+</main>
+<script>
+  // Kod 24 onaltılık hane; uygulama aynı biçimi bekler (davetKodu).
+  var kod = ((new URLSearchParams(location.search).get('k') || '').match(/[0-9a-f]{24}/) || [])[0];
+  var ac = document.getElementById('ac'), durum = document.getElementById('durum');
+  if (!kod) {
+    document.getElementById('baslik').textContent = 'Bu davet linki eksik.';
+    durum.textContent = 'Linkin tamamını kopyaladığından emin ol ya da seni davet edenden yeniden iste.';
+    ac.style.display = 'none';
+  } else {
+    var adres = 'kohort://Davet?kod=' + kod;
+    ac.href = adres;
+    location.href = adres;
+    setTimeout(function () { durum.textContent = 'Açılmadıysa düğmeye bas; Kohort yüklü değilse aşağıdan yükle.'; }, 1500);
+  }
+</script>
+</body>
+</html>
